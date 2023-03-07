@@ -1,0 +1,32 @@
+<img class="wave" src="./assets/auth-images/wave.png">
+	<div class="container">
+		<div class="img">
+			<img src="./assets/auth-images/bg.svg">
+		</div>
+		<div class="login-content">
+			<form [formGroup]="loginForm">
+				<img src="./assets/auth-images/avatar.svg">
+				<h2 class="title">Encuesta</h2>
+           		<div class="input-div one" #inputOne>
+           		   <div class="i">
+           		   		<i class="fas fa-user"></i>
+           		   </div>
+           		   <div class="div">
+           		   		<h5>Correo</h5>
+           		   		<input type="text" class="input" formControlName="email" (focus)="addFocusClass(1)" >
+           		   </div>
+           		</div>
+           		<div class="input-div pass" #inputTwo>
+           		   <div class="i">
+           		    	<i class="fas fa-lock"></i>
+           		   </div>
+           		   <div class="div">
+           		    	<h5>Contraseña</h5>
+           		    	<input type="password" class="input" formControlName="password" (focus)="addFocusClass(2)">
+            	   </div>
+            	</div>
+            	<a href="#">Forgot Password?</a>
+            	<input class="btn" value="Login" (click)="validateFormData()">
+            </form>
+        </div>
+    </div>
