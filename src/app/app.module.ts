@@ -10,12 +10,14 @@ import { RouterModule } from '@angular/router';
 import { LoginComponent } from './modules/auth/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { NotificationComponent } from './components/notification/notification.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     PageNotFoundComponent,
+    NotificationComponent,
   ],
   imports: [
     BrowserModule,

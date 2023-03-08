@@ -2,11 +2,15 @@ import {
   Component,
   ElementRef,
   HostListener,
+  OnInit,
   Renderer2,
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { notificationType } from 'src/app/components/notification/notification.component';
+import { INotification } from 'src/app/interfaces/notification';
+import { NotificationsService } from 'src/app/services/notifications.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -14,21 +18,38 @@ import { UserService } from 'src/app/services/user.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent {
-  emailRegex =
-    /^[a-zA-Z][a-zA-Z0-9|!|*|_|+|\-|{|}|~|.]+@[a-zA-Z0-9]+(?:\.[a-zA-Z]+)+$/;
+export class LoginComponent implements OnInit{
+  emailRegex =/^[a-zA-Z][a-zA-Z0-9|!|*|_|+|\-|{|}|~|.]+@[a-zA-Z0-9]+(?:\.[a-zA-Z]+)+$/;
   @ViewChild('inputOne') inputOne?: ElementRef;
   @ViewChild('inputTwo') inputTwo?: ElementRef;
+  notificationType: string = 'info';
+  message:string = '';
+  showNotification:boolean = false;
+
+
   constructor(
     private fb: FormBuilder,
     private render: Renderer2,
     private auth: UserService,
-    private route: Router
+    private route: Router,
+    private notification:NotificationsService
   ) {}
+
+  ngOnInit(): void {
+    this.notification.notification$.subscribe((res:any)=>{
+      this.message = res.message
+      this.showNotification = true;
+      console.log(this.notificationType, 'ingrese')
+      setTimeout(() => {
+        this.showNotification = false;
+      }, res.time);
+    });
+  }
   loginForm = this.fb.group({
     password: ['', [Validators.required, Validators.minLength(6)]],
     email: ['', [Validators.required, Validators.pattern(this.emailRegex)]],
   });
+
 
   addFocusClass(typeInput: number) {
     if (typeInput === 1) {
@@ -39,24 +60,21 @@ export class LoginComponent {
   }
 
   async validateFormData() {
-    console.log(this.loginForm.controls['email'].valid);
-    console.log(this.loginForm.controls['password'].valid);
-    console.log(this.loginForm.valid);
-    this.auth.lougout()
     if (this.loginForm.valid) {
-      await this.auth
+      await this.singIn();
+      return;
+    }
+  }
+
+  async singIn() {
+    await this.auth
         .login(this.loginForm.value)
         .then(() => {
-          console.log('he resuelto correctamente')
-          this.route.navigate(['/main'])
-        }
-        )
+          this.route.navigate(['/main']);
+        })
         .catch((error) => {
-          console.log(error);
-          console.log(this.loginForm.value);
+          this.notificationType = 'error';
+          this.notification.showNotification('Credenciales Invalidas', 1000);
         });
-        return
-    }
-    console.log('no ingrese al login');
   }
 }
