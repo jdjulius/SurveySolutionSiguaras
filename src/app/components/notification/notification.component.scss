@@ -1,0 +1,24 @@
+.notification{
+  padding: 25px;
+  border-radius: 10px;
+  background-color: #42a5f5;
+  color: white;
+  position: fixed;
+  bottom: 20px;
+  right: -20px;
+  opacity: 0;
+
+  transition: all 1s;
+  &--success{
+    background-color: #4caf50;
+  }
+  &--error{
+    background-color: #ef5350;
+  }
+}
+
+.visible{
+  right: 20px;
+  opacity: 1;
+}
+
